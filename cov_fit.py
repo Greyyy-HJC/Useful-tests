@@ -22,10 +22,10 @@ data = np.random.normal(loc=1, size=(5,5)) # 随机生成的数据
 data_bs = bootstrap(data, 500) # more steps, better independence 通过 bootstrap 让随机数据变为独立样本
 
 mean = np.mean(data_bs, axis=0) 
-sdev = np.std(data_bs, axis=0)
+sdev = np.std(data_bs, axis=0) 
 middle = np.median(data_bs, axis=0) 
 
-data_avg = gv.dataset.avg_data(data_bs, bstrap=True)
+data_avg = gv.dataset.avg_data(data_bs, bstrap=True) # gvar list
 data_cov = gv.evalcov(data_avg) # 从 gvar 数组里抽取协方差矩阵
 data_cov_np = np.cov(data_bs, rowvar=False) # 从数据样本里抽取协方差矩阵
 
@@ -85,3 +85,5 @@ covac = sum/25 - np.average(a) * np.average(c)
 # evalcov: Cov(X, Y) = ( mean(XY) - mean(X)*mean(Y) ) / N, divided by N is because bstrap=False
 print(covab/25 - cov1['a', 'b']) 
 print(covac/25 - cov1['a', 'c'])
+
+# %%
