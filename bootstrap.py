@@ -25,7 +25,7 @@ data_2 = np.random.normal(loc=2, size=(N_conf)) # C_3pt, correlated with C_2pt, 
 ## method 1 ##            ## correct ##
 N_re = 200
 
-data_1_bs = bootstrap(data_1, N_re) # resampling
+data_1_bs = bootstrap(data_1, N_re) # resampling for N_re times
 data_2_bs = bootstrap(data_2, N_re)
 
 ratio_ls = []
