@@ -1,4 +1,5 @@
 #coding=utf-8
+# %%
 
 class Interface(object):
     def __init__(self):
@@ -20,3 +21,4 @@ class Interface(object):
 if __name__ == "__main__":
     go = Interface()
     go.test(1)
+# %%
