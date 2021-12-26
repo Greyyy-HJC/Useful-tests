@@ -16,7 +16,6 @@ def bootstrap(conf_ls, N_re): # used to make random numbers be configs
 
     return np.array(conf_re)
 
-
 # %%
 data = np.random.normal(loc=1, size=(20,20)) # 随机生成的数据
 data_bs = bootstrap(data, 500) # more steps, better independence 通过 bootstrap 让随机数据变为独立样本
