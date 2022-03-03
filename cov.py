@@ -34,6 +34,8 @@ mean = np.mean(data_bs, axis=0)
 sdev = np.std(data_bs, axis=0)
 middle = np.median(data_bs, axis=0) # bs should use median instead of mean
 
+print(np.shape(data_bs))
+
 data_avg = gv.dataset.avg_data(data_bs, bstrap=True)
 
 print(mean)
@@ -41,13 +43,24 @@ print(middle)
 print(sdev)
 print(data_avg) # (median, std)
 
+# if zoom up the cov matrix to sqrt(N-1) times
+cov_temp = gv.evalcov(data_avg)
+mean_temp = gv.mean(data_avg)
+print(mean_temp)
+cov_zoom = cov_temp * 5000
+data_avg_zoom = gv.gvar(mean_temp, cov_zoom)
+
+print(np.sqrt(5000))
+
+print([(data_avg_zoom[i].sdev / data_avg[i].sdev) for i in range(5)])
+
 # %% 
 # compare two calc of covariance
 cov_m = cov_mh(data_bs)
 cov_gv = gv.evalcov(data_avg)
 cov_np = np.cov(data_bs, rowvar=False)
 print(cov_np - cov_gv) # cov from gv and np are slightly different
-print(cov_np - cov_m) # little different, not bad func from minhuan
+print(cov_np - cov_m) # little difference, not bad func from minhuan
 
 # %%
 data_reconstruct = gv.gvar(middle, cov_gv) # use median and cov can reconstruct the gvar list 

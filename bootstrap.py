@@ -33,7 +33,9 @@ for n_re in range(N_re): # calculate ratio in each bs sample
     ratio_ls.append( data_2_bs[n_re] / data_1_bs[n_re] )
 
 res1 = gv.dataset.avg_data(ratio_ls, bstrap=True)
+resf = gv.dataset.avg_data(ratio_ls, bstrap=False)
 print(res1)
+print((res1.sdev / resf.sdev)**2) # should be about 200
 
 # %%
 ## method 2 ## 
