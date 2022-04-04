@@ -43,7 +43,7 @@ print(middle)
 print(sdev)
 print(data_avg) # (median, std)
 
-# if zoom up the cov matrix to sqrt(N-1) times
+# if zoom up the cov matrix to (N-1) times, sdev will zoom up to sqrt(N-1) times
 cov_temp = gv.evalcov(data_avg)
 mean_temp = gv.mean(data_avg)
 print(mean_temp)
@@ -51,8 +51,25 @@ cov_zoom = cov_temp * 5000
 data_avg_zoom = gv.gvar(mean_temp, cov_zoom)
 
 print(np.sqrt(5000))
-
 print([(data_avg_zoom[i].sdev / data_avg[i].sdev) for i in range(5)])
+
+# %% 
+# gv.dataset.avg_data v.s. gv.gvar( np.mean, np.cov )
+data_bs = bootstrap(data, 5000) # more steps, better independence 
+
+mean = np.mean(data_bs, axis=0) 
+middle = np.median(data_bs, axis=0) # bs should use median instead of mean
+cov = np.cov(data_bs, rowvar=False)
+cov_no_bias = cov * 5000/4999
+
+data_avg = gv.dataset.avg_data(data_bs, bstrap=True)
+data_avg_mean_cov = gv.gvar(mean, cov)
+data_avg_mid_cov = gv.gvar(middle, cov_no_bias)
+
+print(data_avg)
+print(data_avg_mean_cov)
+print(data_avg_mid_cov)
+
 
 # %% 
 # compare two calc of covariance
