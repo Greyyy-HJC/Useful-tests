@@ -44,13 +44,18 @@ mellin_moment(jun_x, jun_y, 2)
 
 # %%
 ### separate mean and sdev then remake gvar will eliminate all correlation, which is irreversible ###
+### but gv.gvar(mean, cov) will preserve correlation ###
 
 print(gv.evalcov(jc_y))
+
+cov = gv.evalcov(jc_y)
 
 me = [val.mean for val in jc_y]
 sd = [val.sdev for val in jc_y]
 
 re_gv = gv.gvar(me, sd)
+print(gv.evalcov(re_gv))
 
+re_gv = gv.gvar(me, cov)
 print(gv.evalcov(re_gv))
 # %%
