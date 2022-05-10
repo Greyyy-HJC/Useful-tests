@@ -24,8 +24,45 @@ def cov_mh(a): #协方差矩阵，a.shape = (conf,time)
     cov = np.matmul(cov.T,cov) / con #求对应偏差相乘的均值
     return cov #cov.shape = (time,time)
 
+
+def gv_to_samples(gv_ls, N_samp):
+    '''
+    transform gvar to bs samples
+    '''
+    samp_ls = []
+    for var in gv_ls:
+        samp = np.random.normal(loc=var.mean, scale=var.sdev, size=N_samp)
+        samp_ls.append(samp)
+
+    samp_ls = np.array(samp_ls).T
+
+    return samp_ls
+
+
+def gv_to_samples_corr(gv_ls, N_samp):
+    '''
+    transform gvar to bs samples
+    '''
+    mean = [v.mean for v in gv_ls]
+    cov_m = gv.evalcov(gv_ls)
+    rng = np.random.default_rng()
+
+    samp_ls = rng.multivariate_normal(mean, cov_m, size=N_samp)
+
+    return samp_ls
+
+
 data = np.random.normal(loc=1, size=(5,5))
 #print(data)
+
+
+data_bs = bootstrap(data, 5000) # more steps, better independence 
+data_avg = gv.dataset.avg_data(data_bs, bstrap=True)
+
+#!# here to test two methods 
+print(gv_to_samples(data_avg, 10))
+print(gv_to_samples_corr(data_avg, 10))
+
 
 # %%
 data_bs = bootstrap(data, 5000) # more steps, better independence 
@@ -45,6 +82,12 @@ print(data_avg) # (median, std)
 
 # if zoom up the cov matrix to (N-1) times, sdev will zoom up to sqrt(N-1) times
 cov_temp = gv.evalcov(data_avg)
+
+#!#
+print(gv.evalcov(data_avg))
+print(gv.evalcorr(data_avg))
+print(cov_mh(data_bs))
+
 mean_temp = gv.mean(data_avg)
 print(mean_temp)
 cov_zoom = cov_temp * 5000
