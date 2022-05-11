@@ -2,6 +2,7 @@
 import gvar as gv
 import numpy as np
 import lsqfit as lsf
+import matplotlib.pyplot as plt
 
 # %%
 def bootstrap(conf_ls, N_re): # used to make random numbers be configs
@@ -53,6 +54,19 @@ print(res1.format(100))
 print(res2.format(100)) # 和 res1 相同
 
 print(res3.format(100)) # 和 res1, res2 有小的差别
+
+# %%
+#! fcn(x, fit_results) is correlated
+re_y = fcn(x, res1.p)
+re_re_y = gv.gvar([v.mean for v in re_y], [v.sdev for v in re_y]) #* separate mean and sdev then put them back will eliminate the correlation
+
+print(gv.evalcorr(re_y))
+print(gv.evalcorr(re_re_y))
+
+plt.figure()
+plt.errorbar(x, [v.mean for v in y1], [v.sdev for v in y1])
+plt.fill_between(x, [(v.mean + v.sdev) for v in re_y], [(v.mean - v.sdev) for v in re_y], alpha=0.4)
+plt.show()
 
 
 # %%
