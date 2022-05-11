@@ -57,11 +57,24 @@ print(res3.format(100)) # 和 res1, res2 有小的差别
 
 # %%
 #! fcn(x, fit_results) is correlated
-re_y = fcn(x, res1.p)
-re_re_y = gv.gvar([v.mean for v in re_y], [v.sdev for v in re_y]) #* separate mean and sdev then put them back will eliminate the correlation
 
+re_y = fcn(x, res1.p)
 print(gv.evalcorr(re_y))
+
+#! fcn(x, fit_results) is correlated, even when you input x one by one
+test = []
+for i in range(len(x)):
+    xi = x[i]
+    test.append( fcn(xi, res1.p) )
+
+print(test)
+print(gv.evalcorr(test))
+
+#! separate mean and sdev then put them back will eliminate the correlation
+re_re_y = list(gv.gvar([v.mean for v in re_y], [v.sdev for v in re_y]))
+print(re_re_y)
 print(gv.evalcorr(re_re_y))
+
 
 plt.figure()
 plt.errorbar(x, [v.mean for v in y1], [v.sdev for v in y1])
